@@ -1,24 +1,20 @@
-// App.test.jsx
-
-import { describe, it, expect } from "vitest";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import App from "./App";
+import Accordion from "./accordion";
 
-describe("App component", () => {
-  it("renders Magnificent Monkeys", () => {
-    const { container } = render(<App />);
-    expect(container).toMatchSnapshot();
-  });
+test("can open accordion items to see the contents", async () => {
+  const hats = { title: "Favorite Hats", contents: "Fedoras are classy" };
+  const footware = {
+    title: "Favorite Footware",
+    contents: "Flipflops are the best",
+  };
+  render(<Accordion items={[hats, footware]} />);
 
-  it("renders radical rhinos after a button click", async () => {
-    const user = userEvent.setup();
+  expect(screen.getByText(hats.contents)).toBeInTheDocument();
+  expect(screen.queryByText(footware.contents)).not.toBeInTheDocument();
 
-    render(<App />);
-    const button = screen.getByRole("button", { name: "Click Me!" });
+  await userEvent.click(screen.getByText(footware.title));
 
-    await user.click(button);
-
-    expect(screen.getByRole("heading").textContent).toMatch(/radical rhinos/i);
-  });
+  expect(screen.getByText(footware.contents)).toBeInTheDocument();
+  expect(screen.queryByText(hats.contents)).not.toBeInTheDocument();
 });
