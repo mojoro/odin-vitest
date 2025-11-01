@@ -22,3 +22,20 @@ test("loading text is shown while API request is in progress", async () => {
 
   await waitForElementToBeRemoved(() => screen.getByText("Loading..."));
 });
+
+test("user's name is rendered", async () => {
+  render(<App />);
+  const userName = await screen.findByText("Jack");
+  expect(userName).toBeInTheDocument();
+});
+
+test("error message is shown", async () => {
+  window.fetch.mockImplementationOnce(() => {
+    return Promise.reject({ message: "API is down" });
+  });
+
+  render(<App />);
+
+  const errorMessage = await screen.findByText("API is down");
+  expect(errorMessage).toBeInTheDocument();
+});
