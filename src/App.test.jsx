@@ -6,7 +6,7 @@ test("list contains 5 animals", () => {
   render(<App />);
 
   const listElement = screen.getByRole("list");
-  const listItems = screen.getAllByRole("listItem");
+  const listItems = screen.getAllByRole("listitem");
 
   expect(listElement).toBeInTheDocument();
   expect(listElement).toHaveClass("animals");
