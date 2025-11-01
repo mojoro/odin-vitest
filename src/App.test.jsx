@@ -1,41 +1,32 @@
 import React from "react";
-import {
-  render,
-  screen,
-  waitForElementToBeRemoved,
-} from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
+import UserEvent from "@testing-library/user-event";
 import App from "./App";
 
-window.fetch = vi.fn(() => {
-  const user = { name: "Jack", email: "jack@email.com" };
-
-  return Promise.resolve({
-    json: () => Promise.resolve(user),
-  });
-});
-
 describe("Testing App Component", () => {
-  test("loading text is shown while API request is in progress", async () => {
+  test("counter is incremented on increment button click", async () => {
+    const user = UserEvent.setup();
     render(<App />);
-    const loading = screen.getByText("Loading...");
-    expect(loading).toBeInTheDocument();
-    await waitForElementToBeRemoved(() => screen.getByText("Loading..."));
+
+    const counter = screen.getByTestId("counter");
+    const incrementBtn = screen.getByText("Increment");
+
+    await user.click(incrementBtn);
+    await user.click(incrementBtn);
+
+    expect(counter.textContent).toEqual("2");
   });
 
-  test("user's name is rendered", async () => {
-    render(<App />);
-    const userName = await screen.findByText("Jack");
-    expect(userName).toBeInTheDocument();
-  });
-
-  test("error message is shown", async () => {
-    window.fetch.mockImplementationOnce(() => {
-      return Promise.reject({ message: "API is down" });
-    });
-
+  test("counter is decremented on decrement button click", async () => {
+    const user = UserEvent.setup();
     render(<App />);
 
-    const errorMessage = await screen.findByText("API is down");
-    expect(errorMessage).toBeInTheDocument();
+    const counter = screen.getByTestId("counter");
+    const decrementBtn = screen.getByText("Decrement");
+
+    await user.click(decrementBtn);
+    await user.click(decrementBtn);
+
+    expect(counter.textContent).toEqual("-2");
   });
 });
