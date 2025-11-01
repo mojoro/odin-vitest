@@ -1,23 +1,21 @@
 import React from "react";
 
 function App() {
-  const [counter, setCounter] = React.useState(0);
+  const [inputValue, setInputValue] = React.useState("");
 
-  const increment = () => {
-    setCounter((prevCounter) => ++prevCounter);
-  };
-
-  const decrement = () => {
-    setCounter((prevCounter) => --prevCounter);
+  const handleChange = (event) => {
+    setInputValue(event.target.value);
   };
 
   return (
     <div>
-      <h2 data-testid="counter">{counter}</h2>
-      <button onClick={decrement}>Decrement</button>
-      <button onClick={increment}>Increment</button>
+      <Input handleChange={handleChange} inputValue={inputValue} />
     </div>
   );
+}
+export function Input(props) {
+  const { handleChange, inputValue } = props;
+  return <input onChange={handleChange} value={inputValue} />;
 }
 
 export default App;

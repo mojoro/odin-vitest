@@ -3,30 +3,24 @@ import { render, screen } from "@testing-library/react";
 import UserEvent from "@testing-library/user-event";
 import App from "./App";
 
-describe("Testing App Component", () => {
-  test("counter is incremented on increment button click", async () => {
-    const user = UserEvent.setup();
-    render(<App />);
+import { Input } from "./App";
 
-    const counter = screen.getByTestId("counter");
-    const incrementBtn = screen.getByText("Increment");
+const user = UserEvent.setup();
+test("call the callback every time input value is changed", async () => {
+  const handleChange = vi.fn();
 
-    await user.click(incrementBtn);
-    await user.click(incrementBtn);
+  render(<Input handleChange={handleChange} inputValue="" />);
 
-    expect(counter.textContent).toEqual("2");
-  });
+  const input = screen.getByRole("textbox");
+  await user.type(input, "React");
 
-  test("counter is decremented on decrement button click", async () => {
-    const user = UserEvent.setup();
-    render(<App />);
+  expect(handleChange).toHaveBeenCalledTimes(5);
+});
 
-    const counter = screen.getByTestId("counter");
-    const decrementBtn = screen.getByText("Decrement");
+test("input value is updated correctly", async () => {
+  render(<App />);
 
-    await user.click(decrementBtn);
-    await user.click(decrementBtn);
-
-    expect(counter.textContent).toEqual("-2");
-  });
+  const input = screen.getByRole("textbox");
+  await user.type(input, "React");
+  expect(input.value).toBe("React");
 });
