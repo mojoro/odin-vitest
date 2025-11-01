@@ -1,14 +1,24 @@
 import React from "react";
-import { render, screen } from "@testing-library/react";
+import {
+  render,
+  screen,
+  waitForElementToBeRemoved,
+} from "@testing-library/react";
 import App from "./App";
 
-test("list contains 5 animals", () => {
+window.fetch = vi.fn(() => {
+  const user = { name: "Jack", email: "jack@email.com" };
+
+  return Promise.resolve({
+    json: () => Promise.resolve(user),
+  });
+});
+
+test("loading text is shown while API request is in progress", async () => {
   render(<App />);
+  const loading = screen.getByText("Loading...");
 
-  const listElement = screen.getByRole("list");
-  const listItems = screen.getAllByRole("listitem");
+  expect(loading).toBeInTheDocument();
 
-  expect(listElement).toBeInTheDocument();
-  expect(listElement).toHaveClass("animals");
-  expect(listItems.length).toEqual(5);
+  await waitForElementToBeRemoved(() => screen.getByText("Loading..."));
 });
