@@ -1,11 +1,11 @@
-import Accordion from "./accordion";
+import React from "react";
 
-const hats = { title: "Favorite Hats", contents: "Fedoras are classy" };
-const footware = {
-  title: "Favorite Footware",
-  contents: "Flipflops are the best",
-};
-
-const App = () => <Accordion items={[hats, footware]}></Accordion>;
+function App() {
+  return (
+    <div>
+      <h1>Hello World</h1>
+    </div>
+  );
+}
 
 export default App;
