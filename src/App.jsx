@@ -1,5 +1,11 @@
-// App.jsx
+import Accordion from "./components/accordion";
 
-const App = () => <h1>Our First Test</h1>;
+const App = () => {
+  return (
+    <>
+      <Accordion></Accordion>
+    </>
+  );
+};
 
 export default App;
